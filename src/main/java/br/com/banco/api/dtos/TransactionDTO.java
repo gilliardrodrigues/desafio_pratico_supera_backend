@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 
 @Getter
 @Setter
-public class TransactionDTOResponse {
+public class TransactionDTO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private OffsetDateTime date;
