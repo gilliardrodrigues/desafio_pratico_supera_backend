@@ -1,13 +1,18 @@
 package br.com.banco.domain.services;
 
+import br.com.banco.api.dtos.BankExtractDTO;
+import br.com.banco.api.dtos.TransactionDTO;
 import br.com.banco.domain.exceptions.AccountIdNotFoundException;
 import br.com.banco.domain.exceptions.MissingArgumentException;
+import br.com.banco.domain.mappers.GenericMapper;
 import br.com.banco.domain.models.entities.Transaction;
 import br.com.banco.domain.repositories.TransactionRepository;
+import org.modelmapper.TypeToken;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +21,23 @@ import java.util.List;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final GenericMapper mapper;
 
-    public TransactionService(TransactionRepository transactionRepository) {
+    public TransactionService(TransactionRepository transactionRepository, GenericMapper mapper) {
 
         this.transactionRepository = transactionRepository;
+        this.mapper = mapper;
+    }
+
+    public BankExtractDTO getBankExtract(Long accountId, OffsetDateTime startDate, OffsetDateTime endDate, String transactionOperatorName) {
+
+        var allTransactions = findAllByParameters(accountId, null, null, null);
+        var totalSum = sumTransactionValues(allTransactions);
+        var filteredTransactions = findAllByParameters(accountId, startDate, endDate, transactionOperatorName);
+        var partialSum = sumTransactionValues(filteredTransactions);
+        List<TransactionDTO> filteredTransactionsDTO = mapper.mapToList(filteredTransactions, new TypeToken<List<TransactionDTO>>() {}.getType());
+
+        return new BankExtractDTO(filteredTransactionsDTO, partialSum, totalSum);
     }
 
     public List<Transaction> findAllByParameters(Long accountId, OffsetDateTime startDate, OffsetDateTime endDate, String transactionOperatorName) {
@@ -56,6 +74,11 @@ public class TransactionService {
         };
 
         return transactionRepository.findAll(spec);
+    }
+
+    private BigDecimal sumTransactionValues(List<Transaction> transactions) {
+
+        return transactions.stream().map(Transaction::getValue).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private boolean existsByAccountId(Long accountId) {
