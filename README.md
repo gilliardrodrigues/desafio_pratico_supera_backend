@@ -1,5 +1,6 @@
 # Processo Seletivo Java
-
+![Code Coverage](.github/badges/jacoco.svg)
+![Made with Spring Boot](https://img.shields.io/badge/made%20with-Spring%20Boot-green?logo=Spring)
 ## Descrição 
 
 - Este teste consiste em construir uma camada de serviço, para uma operação muito realizada em bancos, para emissão de extrato bancário.
