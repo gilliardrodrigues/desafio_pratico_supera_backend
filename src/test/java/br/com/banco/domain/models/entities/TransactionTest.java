@@ -137,7 +137,7 @@ class TransactionTest {
 
         Transaction transaction1 = Transaction.builder()
                 .id(1L)
-                .date(OffsetDateTime.now())
+                .date(OffsetDateTime.MIN.plusYears(100))
                 .value(BigDecimal.valueOf(100.00))
                 .type(TransactionType.TRANSFERENCIA)
                 .transactionOperatorName("João")
@@ -146,7 +146,7 @@ class TransactionTest {
 
         Transaction transaction2 = Transaction.builder()
                 .id(1L)
-                .date(OffsetDateTime.now())
+                .date(OffsetDateTime.MIN.plusYears(100))
                 .value(BigDecimal.valueOf(100.00))
                 .type(TransactionType.TRANSFERENCIA)
                 .transactionOperatorName("João")
