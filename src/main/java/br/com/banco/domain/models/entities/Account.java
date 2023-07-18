@@ -1,10 +1,6 @@
 package br.com.banco.domain.models.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.Hibernate;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +8,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -19,7 +16,7 @@ import java.util.Objects;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID_CONTA", nullable = false)
     private Long id;
 
@@ -32,14 +29,15 @@ public class Account {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return getId() != null && Objects.equals(getId(), account.getId());
+        return Objects.equals(id, account.id) &&
+                Objects.equals(responsibleName, account.responsibleName);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(id, responsibleName);
     }
 
     @Override

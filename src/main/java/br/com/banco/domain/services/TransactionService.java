@@ -76,12 +76,12 @@ public class TransactionService {
         return transactionRepository.findAll(spec);
     }
 
-    private BigDecimal sumTransactionValues(List<Transaction> transactions) {
+    protected BigDecimal sumTransactionValues(List<Transaction> transactions) {
 
         return transactions.stream().map(Transaction::getValue).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private boolean existsByAccountId(Long accountId) {
+    protected boolean existsByAccountId(Long accountId) {
 
         return transactionRepository.existsByAccountId(accountId);
     }

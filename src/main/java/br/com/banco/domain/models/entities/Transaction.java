@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -44,11 +44,28 @@ public class Transaction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(value, that.value) && type == that.type && Objects.equals(transactionOperatorName, that.transactionOperatorName) && Objects.equals(account, that.account);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(date, that.date) &&
+                Objects.equals(value, that.value) &&
+                type == that.type &&
+                Objects.equals(transactionOperatorName, that.transactionOperatorName) &&
+                Objects.equals(account, that.account);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, date, value, type, transactionOperatorName, account);
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", date=" + date +
+                ", value=" + value +
+                ", type=" + type +
+                ", transactionOperatorName='" + transactionOperatorName + '\'' +
+                ", account=" + account +
+                '}';
     }
 }
